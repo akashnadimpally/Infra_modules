@@ -72,3 +72,11 @@ module "nat_gateway" {
     nat_gateway_subnet_id = "${module.nat_gateway_subnet.subnet_id}"
 }
 
+module "network_sg" {
+    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nsg"
+    rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
+    location_name = var.azure_location
+    nsg_name = var.network_security_group_name
+  
+}
+

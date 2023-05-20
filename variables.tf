@@ -52,3 +52,8 @@ variable "nat_zones_value" {
   type = string
   default = "1"
 }
+
+variable "network_security_group_name" {
+  type = string
+  default = "horizon-nsg"
+}
