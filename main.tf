@@ -41,4 +41,10 @@ module "iaas_subnet2" {
     address_prefixes_ip = "192.168.2.0/27"
 }
 
+module "pip" {
+    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/pip"
+    rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
+    location_name = var.azure_location
+    pip_name = var.public_ip_name
+}
 

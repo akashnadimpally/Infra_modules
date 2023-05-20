@@ -21,3 +21,8 @@ variable "subnet_name" {
   description = "description"
 }
 
+variable "public_ip_name" {
+  type        = string
+  default     = "horizon-pip"
+  description = "description"
+}
