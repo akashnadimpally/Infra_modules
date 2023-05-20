@@ -77,6 +77,5 @@ module "network_sg" {
     rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
     location_name = var.azure_location
     nsg_name = var.network_security_group_name
-  
 }
 
