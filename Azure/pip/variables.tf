@@ -13,9 +13,13 @@ variable "location_name" {
   description = "location name"
 }
 
-variable "allocation_method" {
+variable "allocation_method_name" {
   type        = string
   default     = "Dynamic"
   description = "description"
 }
 
+variable "sku_name" {
+  type = string
+  default = "Standard"
+}

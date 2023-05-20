@@ -26,3 +26,29 @@ variable "public_ip_name" {
   default     = "horizon-pip"
   description = "description"
 }
+
+variable "allocate_method_name" {
+  type = string
+  default = "Static"
+}
+
+variable "sku_name_azure" {
+  type = string
+  default = "Standard"
+}
+
+
+variable "nat_name_azure" {
+  type = string
+  default = "horizon-nat"
+}
+
+variable "nat_sku_name_azure" {
+  type = string
+  default = "Standard"
+}
+
+variable "nat_zones_value" {
+  type = string
+  default = "1"
+}
