@@ -72,10 +72,27 @@ module "nat_gateway" {
     nat_gateway_subnet_id = "${module.nat_gateway_subnet.subnet_id}"
 }
 
-module "network_sg" {
+ module "network_sg" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nsg"
     rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
     location_name = var.azure_location
-    nsg_name = var.network_security_group_name
+    nsg_name = "${module.resource_group_azure.resource_group_name}-nsg"
 }
 
+module "route_table" {
+    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/route_table"
+    route_table_name = "${module.resource_group_azure.resource_group_name}-rt"
+    rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
+    location_name = var.azure_location
+}
+
+#module "routes" {
+#    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/routes"
+#    route_table_name = "${module.resource_group_azure.resource_group_name}-rt"
+#    rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
+#    location_name = var.azure_location
+#    route_name = "${module.resource_group_azure.resource_group_name}-route"
+#    rt_address_prefix = var.rt_addr_prfx
+#    next_hop_type_name = var.nxt_hop_type
+#    /* nxt_hop_ip_addr = var.next_ip_address_hop */
+#}

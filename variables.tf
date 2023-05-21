@@ -57,3 +57,26 @@ variable "network_security_group_name" {
   type = string
   default = "horizon-nsg"
 }
+
+/* variable "route_table_name_azure" {
+  type = string
+} */
+
+/* variable "rt_name" {
+  type = string
+} */
+/* 
+variable "rt_addr_prfx" {
+  type = string
+  default = ""
+}
+
+variable "nxt_hop_type" {
+  type = string
+  default = ""
+} */
+
+/* variable "next_ip_address_hop" {
+  type = strin
+  default = ""
+} */
