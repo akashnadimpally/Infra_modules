@@ -96,3 +96,17 @@ module "route_table" {
 #    next_hop_type_name = var.nxt_hop_type
 #    /* nxt_hop_ip_addr = var.next_ip_address_hop */
 #}
+
+
+module "ple_subnet" {
+    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
+    rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
+    location_name = var.azure_location
+    vnet_name = "${module.resource_group_vnet_azure.resource_group_name}-vnet"
+    vnet_address_prefix = module.virtualnet_azure.vnet_address_prefix
+    existing_subnet_name = ""
+    s_name = "ple_subnet"
+    address_prefixes_ip = "192.168.4.0/27"
+}
+
+
