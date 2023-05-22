@@ -80,3 +80,8 @@ variable "nxt_hop_type" {
   type = strin
   default = ""
 } */
+
+variable "umi_name" {
+  type = string
+  default = "horizon-umi1"
+}
