@@ -11,16 +11,16 @@ resource "azurerm_key_vault" "key_vault" {
 
   sku_name = var.sku_kv_name
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+  /* access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id */
+    /* object_id = data.azurerm_client_config.current.object_id */
 
-    secret_permissions      = ["get", "list"]
-    key_permissions         = ["get", "list"]
-    certificate_permissions = ["get", "list"]
-  }
+    /* secret_permissions      = ["Get", "List"]
+    key_permissions         = ["Get", "List"]
+    certificate_permissions = ["Get", "List"]
+  } */
 
-  dynamic "access_policy" {
+  /* dynamic "access_policy" {
     for_each = var.access_policies
     content {
       tenant_id               = access_policy.value.tenant_id
@@ -28,6 +28,6 @@ resource "azurerm_key_vault" "key_vault" {
       secret_permissions      = access_policy.value.secret_permissions
       key_permissions         = access_policy.value.key_permissions
       certificate_permissions = access_policy.value.certificate_permissions
-    }
-  }
+    } 
+  } */
 }

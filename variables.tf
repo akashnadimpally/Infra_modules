@@ -1,6 +1,5 @@
 variable "resource_group_name" {
   type        = string
-  default     = "horizon"
   description = "description"
 }
 
@@ -28,33 +27,33 @@ variable "public_ip_name" {
 }
 
 variable "allocate_method_name" {
-  type = string
+  type    = string
   default = "Static"
 }
 
 variable "sku_name_azure" {
-  type = string
+  type    = string
   default = "Standard"
 }
 
 
 variable "nat_name_azure" {
-  type = string
+  type    = string
   default = "horizon-nat"
 }
 
 variable "nat_sku_name_azure" {
-  type = string
+  type    = string
   default = "Standard"
 }
 
 variable "nat_zones_value" {
-  type = string
+  type    = string
   default = "1"
 }
 
 variable "network_security_group_name" {
-  type = string
+  type    = string
   default = "horizon-nsg"
 }
 
@@ -82,6 +81,38 @@ variable "nxt_hop_type" {
 } */
 
 variable "umi_name" {
-  type = string
+  type    = string
   default = "horizon-umi1"
+}
+
+variable "key_vault_name" {
+  type = string
+  default = "horizonkv001"
+  
+}
+
+variable "disk_encrypt_bool" {
+  type = bool
+  default = false
+}
+
+variable "purge_protection_enable" {
+  type = bool
+  default = true
+}
+
+variable "sku_name" {
+  type = string
+  default = "standard"
+}
+
+/* variable "managed_identity_object_id" {
+  type = string
+  #default = module.user_assigned_managed_identity.managed_identity_object_id
+} */
+
+
+variable "azure_private_dns_zone_name" {
+  type = string
+  default = "devhorizonkv.com"
 }
