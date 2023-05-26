@@ -4,7 +4,8 @@ resource "azurerm_storage_account" "storage_account" {
   resource_group_name         = var.rg_name
   account_tier             = var.storage_account_tier
   account_replication_type = var.account_replication_type_name
-  enable_https_traffic_only = var.HTTPS_traffic_enable 
+  enable_https_traffic_only = var.HTTPS_traffic_enable
+  allow_nested_items_to_be_public = false
 
   /* network_rules {
     default_action = "Deny"
