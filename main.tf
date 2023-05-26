@@ -50,7 +50,7 @@ module "iaas_subnet2" {
     sku_name = var.sku_name_azure
 } */
 
-/* module "nat_gateway_subnet" {
+module "nat_gateway_subnet" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
     rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
     location_name = var.azure_location
@@ -59,7 +59,7 @@ module "iaas_subnet2" {
     existing_subnet_name = ""
     s_name = "natgateway_subnet"
     address_prefixes_ip = "192.168.3.0/27"
-} */
+}
 
 #module "nat_gateway" {
 #    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nat_gateway"
@@ -97,8 +97,28 @@ module "iaas_subnet2" {
 #    /* nxt_hop_ip_addr = var.next_ip_address_hop */
 #}
 
+module "ple_subnet_nsg" {
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nsg"
+  nsg_name = "ple_subnet_nsg"
+  rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
+  location_name = var.azure_location
+}
 
-/* module "ple_subnet" {
+module "ple_subnet_inbound_nsg_rule" {
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nsg/inbound_nsg_rule"
+  nsg_rule_name = "${module.ple_subnet_nsg.nsg_name}-inbound-deny"
+  inbound_priority_number = 101
+  inbound_access_control = "Deny"
+  inbound_protocol_name = "Tcp"
+  inbound_src_port = "*"
+  inbound_dest_port = "*"
+  inbound_src_address_prefix = "*"
+  inbound_dest_address_prefix = "*"
+  rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
+  nsg_name = "${module.ple_subnet_nsg.nsg_name}"
+}
+
+module "ple_subnet" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
     rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
     location_name = var.azure_location
@@ -107,7 +127,14 @@ module "iaas_subnet2" {
     existing_subnet_name = ""
     s_name = "ple_subnet"
     address_prefixes_ip = "192.168.4.0/27"
-} */
+}
+
+module "ple_subnet_association" {
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nsg_subnet_association"
+  nsg_subnet_id = module.ple_subnet.subnet_id
+  nsg_id = module.ple_subnet_nsg.nsg_id
+}
+
 
 
 module "user_assigned_managed_identity" {
@@ -118,7 +145,7 @@ module "user_assigned_managed_identity" {
 }
 
 
-/* module "key_vault_creation" {
+module "key_vault_creation" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault"
     kv_name = var.key_vault_name
     rg_name       = module.resource_group_azure.resource_group_name
@@ -126,7 +153,7 @@ module "user_assigned_managed_identity" {
     disk_encryption = var.disk_encrypt_bool
     purge_protection = var.purge_protection_enable
     sku_kv_name = var.sku_name
-} */
+}
 
 /* module "key_vault_access_policies" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault/key_vault_access_policy"
@@ -139,11 +166,11 @@ module "user_assigned_managed_identity" {
     storage_permission = ["Get", "List"]
 } */
 
-/* module "azure_private_dns_zone" {
+module "azure_private_dns_zone" {
   source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/private_dns_zone"
   private_dns_zone_name = var.azure_private_dns_zone_name
   rg_name       = module.resource_group_azure.resource_group_name
-} */
+}
 
 module "storage_subnet" {
   source               = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
@@ -161,7 +188,7 @@ module "azure_storage_account" {
   rg_name       = module.resource_group_azure.resource_group_name
   location_name = var.azure_location
   storage_account_tier = "Standard"
-  storage_account_name = ""
+  storage_account_name = "onbcrmitoolkavl2025"
   account_replication_type_name = "GRS"
   HTTPS_traffic_enable = true
   allowed_vnet_subnetid = module.storage_subnet.subnet_id
