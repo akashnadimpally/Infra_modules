@@ -6,6 +6,11 @@ resource "azurerm_storage_account" "storage_account" {
   account_replication_type = var.account_replication_type_name
   enable_https_traffic_only = var.HTTPS_traffic_enable 
 
+  blob_properties {
+    prevent_blob_delete = true
+    enable_delete_retention = false
+  }
+
   network_rules {
     default_action = "Deny"
 

@@ -14,12 +14,12 @@ module "virtualnet_azure" {
   source                 = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/virtual_network"
   rg_name                = module.resource_group_vnet_azure.resource_group_name
   location_name          = var.azure_location
-  vnet_name              = "${module.resource_group_azure.resource_group_name}-vnet"
+  vnet_name              = "${module.resource_group_vnet_azure.resource_group_name}-vnet"
   existing_vnet_name     = "" # Provide the existing virtual network name if it exists, or leave it empty
   vnet_address_prefix_ip = "192.168.0.0/16"
 }
 
-module "iaas_subnet" {
+module "iaas_subnet1" {
   source               = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
   rg_name              = module.resource_group_vnet_azure.resource_group_name
   location_name        = var.azure_location
@@ -118,7 +118,7 @@ module "user_assigned_managed_identity" {
 }
 
 
-module "key_vault_creation" {
+/* module "key_vault_creation" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault"
     kv_name = var.key_vault_name
     rg_name       = module.resource_group_azure.resource_group_name
@@ -126,18 +126,18 @@ module "key_vault_creation" {
     disk_encryption = var.disk_encrypt_bool
     purge_protection = var.purge_protection_enable
     sku_kv_name = var.sku_name
-}
+} */
 
-module "key_vault_access_policies" {
+/* module "key_vault_access_policies" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault/key_vault_access_policy"
-    kv_id = module.key_vault_creation.key_vault_id
+    kv_id = module.key_vault_creation.key_vault_id */
     /* access_policies = var.kv_access_policy */
     /* managed_identity_object_id = module.user_assigned_managed_identity.managed_identity_object_id */
-    object_ids          = [module.user_assigned_managed_identity.managed_identity_object_id]
+    /* object_ids          = [module.user_assigned_managed_identity.managed_identity_object_id]
     key_permission     = ["Get", "List", "Create"]
     secret_permission  = ["Get", "List", "Set"]
     storage_permission = ["Get", "List"]
-}
+} */
 
 /* module "azure_private_dns_zone" {
   source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/private_dns_zone"
@@ -161,7 +161,7 @@ module "azure_storage_account" {
   rg_name       = module.resource_group_azure.resource_group_name
   location_name = var.azure_location
   storage_account_tier = "Standard"
-  storage_account_name = "horizondevpoc33r890942"
+  storage_account_name = ""
   account_replication_type_name = "GRS"
   HTTPS_traffic_enable = true
   allowed_vnet_subnetid = module.storage_subnet.subnet_id
