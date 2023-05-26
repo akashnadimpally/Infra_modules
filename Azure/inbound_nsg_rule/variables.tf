@@ -2,12 +2,8 @@ variable "rg_name" {
   type = string
 }
 
-variable "nsg_name" {
-  type = string
-}
-
 variable "nsg_rule_name" {
-    type = string
+  type = string
 }
 
 variable "inbound_priority_number" {
@@ -35,5 +31,9 @@ variable "inbound_src_address_prefix" {
 }
 
 variable "inbound_dest_address_prefix" {
+  type = string
+}
+
+variable "nsg_name" {
   type = string
 }

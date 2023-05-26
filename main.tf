@@ -105,8 +105,8 @@ module "ple_subnet_nsg" {
 }
 
 module "ple_subnet_inbound_nsg_rule" {
-  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nsg/inbound_nsg_rule"
-  nsg_rule_name = "${module.ple_subnet_nsg.nsg_name}-inbound-deny"
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/inbound_nsg_rule"
+  nsg_rule_name = "${module.ple_subnet_nsg.nsg_name_output}-inbound-deny"
   inbound_priority_number = 101
   inbound_access_control = "Deny"
   inbound_protocol_name = "Tcp"
@@ -115,7 +115,7 @@ module "ple_subnet_inbound_nsg_rule" {
   inbound_src_address_prefix = "*"
   inbound_dest_address_prefix = "*"
   rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
-  nsg_name = "${module.ple_subnet_nsg.nsg_name}"
+  nsg_name = "${module.ple_subnet_nsg.nsg_name_output}"
 }
 
 module "ple_subnet" {
@@ -135,15 +135,12 @@ module "ple_subnet_association" {
   nsg_id = module.ple_subnet_nsg.nsg_id
 }
 
-
-
 module "user_assigned_managed_identity" {
   source        = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/managed_identity"
   rg_name       = module.resource_group_azure.resource_group_name
   location_name = var.azure_location
   user_mi_name  = var.umi_name
 }
-
 
 module "key_vault_creation" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault"
@@ -156,7 +153,7 @@ module "key_vault_creation" {
 }
 
 /* module "key_vault_access_policies" {
-    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault/key_vault_access_policy"
+    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault_access_policy"
     kv_id = module.key_vault_creation.key_vault_id */
     /* access_policies = var.kv_access_policy */
     /* managed_identity_object_id = module.user_assigned_managed_identity.managed_identity_object_id */

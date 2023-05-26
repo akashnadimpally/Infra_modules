@@ -1,4 +1,4 @@
-resource "azurerm_network_security_rule" "inbound_nsg_rule" {
+resource "azurerm_network_security_rule" "outbound_nsg_rule" {
   name                        = var.nsg_rule_name
   priority                    = var.inbound_priority_number
   direction                   = "Inbound"

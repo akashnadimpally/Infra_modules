@@ -1,4 +1,4 @@
-output "nsg_name" {
+output "nsg_name_output" {
     value = azurerm_network_security_group.nsg.name
 }
 
