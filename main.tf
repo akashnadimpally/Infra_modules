@@ -129,17 +129,10 @@ module "ple_subnet" {
     address_prefixes_ip = "192.168.4.0/27"
 }
 
-module "ple_subnet_association" {
+module "ple_subnet_nsg_association" {
   source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/nsg_subnet_association"
   nsg_subnet_id = module.ple_subnet.subnet_id
   nsg_id = module.ple_subnet_nsg.nsg_id
-}
-
-module "user_assigned_managed_identity" {
-  source        = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/managed_identity"
-  rg_name       = module.resource_group_azure.resource_group_name
-  location_name = var.azure_location
-  user_mi_name  = var.umi_name
 }
 
 module "key_vault_creation" {
@@ -169,6 +162,13 @@ module "azure_private_dns_zone" {
   rg_name       = module.resource_group_azure.resource_group_name
 }
 
+module "user_assigned_managed_identity" {
+  source        = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/managed_identity"
+  rg_name       = module.resource_group_azure.resource_group_name
+  location_name = var.azure_location
+  user_mi_name  = var.umi_name
+}
+
 module "storage_subnet" {
   source               = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
   rg_name              = module.resource_group_vnet_azure.resource_group_name
@@ -185,10 +185,25 @@ module "azure_storage_account" {
   rg_name       = module.resource_group_azure.resource_group_name
   location_name = var.azure_location
   storage_account_tier = "Standard"
-  storage_account_name = "onbcrmitoolkavl2025"
-  account_replication_type_name = "GRS"
+  storage_account_name = "onbcrmitoolkavl2010"
+  account_replication_type_name = "ZRS"
   HTTPS_traffic_enable = true
   allowed_vnet_subnetid = module.storage_subnet.subnet_id
 }
 
+module "storage_acc_container" {
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/storage_container"
+  storage_container_name = "${module.azure_storage_account.storage_account_name}-horizoncontainer"
+  storage_acc_name = module.azure_storage_account.storage_account_name
+}
 
+module "storage_ple" {
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/private_link_endpoint"
+  rg_name       = module.resource_group_azure.resource_group_name
+  location_name = var.azure_location
+  private_link_endpoint_name = "${module.azure_storage_account.storage_account_name}-ple-sa"
+  ple_subnet_id = module.storage_subnet.subnet_id
+  private_connection_name = "${module.azure_storage_account.storage_account_name}-ple-connection"
+  private_connection_res_id = module.azure_storage_account.storage_account_id
+  resource_type_name = "blob"
+}
