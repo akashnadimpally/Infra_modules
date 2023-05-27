@@ -10,6 +10,19 @@ module "resource_group_vnet_azure" {
   location_name = var.azure_location
 }
 
+module "user_assigned_managed_identity" {
+  source        = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/managed_identity"
+  rg_name       = module.resource_group_azure.resource_group_name
+  location_name = var.azure_location
+  user_mi_name  = var.umi_name
+}
+
+module "azure_private_dns_zone" {
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/private_dns_zone"
+  private_dns_zone_name = var.azure_private_dns_zone_name
+  rg_name       = module.resource_group_azure.resource_group_name
+}
+
 module "virtualnet_azure" {
   source                 = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/virtual_network"
   rg_name                = module.resource_group_vnet_azure.resource_group_name
@@ -79,12 +92,12 @@ module "nat_gateway_subnet" {
     nsg_name = "${module.resource_group_azure.resource_group_name}-nsg"
 } */
 
-/* module "route_table" {
+module "route_table" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/route_table"
     route_table_name = "${module.resource_group_azure.resource_group_name}-rt"
     rg_name = "${module.resource_group_vnet_azure.resource_group_name}"
     location_name = var.azure_location
-} */
+}
 
 #module "routes" {
 #    source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/routes"
@@ -135,6 +148,17 @@ module "ple_subnet_nsg_association" {
   nsg_id = module.ple_subnet_nsg.nsg_id
 }
 
+module "kv_subnet" {
+  source               = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
+  rg_name              = module.resource_group_vnet_azure.resource_group_name
+  location_name        = var.azure_location
+  vnet_name            = "${module.resource_group_vnet_azure.resource_group_name}-vnet"
+  vnet_address_prefix  = module.virtualnet_azure.vnet_address_prefix
+  existing_subnet_name = ""
+  s_name               = "keyvaultsubnet"
+  address_prefixes_ip  = "192.168.5.0/27"
+}
+
 module "key_vault_creation" {
     source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/key_vault"
     kv_name = var.key_vault_name
@@ -143,6 +167,17 @@ module "key_vault_creation" {
     disk_encryption = var.disk_encrypt_bool
     purge_protection = var.purge_protection_enable
     sku_kv_name = var.sku_name
+}
+
+module "key_vault_ple" {
+  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/private_link_endpoint"
+  rg_name       = module.resource_group_azure.resource_group_name
+  location_name = var.azure_location
+  private_link_endpoint_name = "${module.key_vault_creation.key_vault_name_output}-ple-kv"
+  ple_subnet_id = module.kv_subnet.subnet_id
+  private_connection_name = "${module.key_vault_creation.key_vault_name_output}-ple-connection"
+  private_connection_res_id = module.key_vault_creation.key_vault_id
+  resource_type_name = "vault"
 }
 
 /* module "key_vault_access_policies" {
@@ -156,19 +191,6 @@ module "key_vault_creation" {
     storage_permission = ["Get", "List"]
 } */
 
-module "azure_private_dns_zone" {
-  source = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/private_dns_zone"
-  private_dns_zone_name = var.azure_private_dns_zone_name
-  rg_name       = module.resource_group_azure.resource_group_name
-}
-
-module "user_assigned_managed_identity" {
-  source        = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/managed_identity"
-  rg_name       = module.resource_group_azure.resource_group_name
-  location_name = var.azure_location
-  user_mi_name  = var.umi_name
-}
-
 module "storage_subnet" {
   source               = "/Users/u1418758/Desktop/Repos/Infra_modules/Azure/subnet"
   rg_name              = module.resource_group_vnet_azure.resource_group_name
@@ -177,7 +199,7 @@ module "storage_subnet" {
   vnet_address_prefix  = module.virtualnet_azure.vnet_address_prefix
   existing_subnet_name = ""
   s_name               = "storagesubnet"
-  address_prefixes_ip  = "192.168.5.0/27"
+  address_prefixes_ip  = "192.168.6.0/27"
 }
 
 module "azure_storage_account" {
