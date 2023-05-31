@@ -23,6 +23,6 @@ variable "HTTPS_traffic_enable" {
   type = bool
 }
 
-variable "allowed_vnet_subnetid" {
+/* variable "allowed_vnet_subnetid" {
     type = string
-}
+} */
